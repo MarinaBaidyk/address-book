@@ -22,7 +22,7 @@ export const contactDelete = (index) => ({
   payload: index
 });
 
-export const upadateContact = (value, contactIndex ) => ({
+export const contactUpdate = (value, contactIndex ) => ({
   type: actionTypes.CONTACT_UPDATE,
   payload: {value, contactIndex},
 });

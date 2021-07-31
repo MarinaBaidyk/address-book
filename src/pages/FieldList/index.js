@@ -1,57 +1,74 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core';
-import FieldItem from '../../components/FieldItem';
-import {Link} from 'react-router-dom';
-//import * as contactActions from "../../store/contactList/actions";
-import './index.css';
+import { connect } from "react-redux";
+import FieldItem from "../../components/FieldItem";
+import { Link } from "react-router-dom";
+import { Button, Dialog, DialogActions, DialogTitle } from "@material-ui/core";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
+import * as actions from "../../store/fieldList/actions";
+import "./index.css";
 
-function FieldList({ list, fields, onDelete }) {
-  const [open, setOpen] = React.useState(false);
+function FieldList ({ fields, onDelete }){
+    const [field, setField] = useState({});
+    const [openDeleteModal, setDeleteModal] = useState(false);
+    const handleClickOpenDelete = (value) => {
+      setField(value);
+      setDeleteModal(true);
+    };
+    const handleCloseDelete = () => {
+        setDeleteModal(false);
+    };
+    const onDeleteHandler = () => {
+        setDeleteModal(false);
+        onDelete(field);
+    }
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+    const history = useHistory();
 
-  const keys = fields.map(field => field.displayName);
+    const handleClick = (index) => {history.push(`/fields/edit/${index}`)};
 
-  return (
-    <>
-      <Link to="/fields/add" className="link-add">
-        <Button variant="contained" color="primary">
-          Create New Field
-        </Button>
-      </Link>
+    return (
+        <>
+          <Link to="/fields/add" className="link-add">
+            <Button variant="contained" color="primary">
+              Create New Field
+            </Button>
+          </Link>
 
-      <div className="contact-list-container">
-        {keys.map((field) => (
-          <FieldItem key={field} field={field} onDelete={handleOpen} />
-        ))}
-        
-      </div>
+          <div className="field-list-container">
+              {fields.map((item, index) => (
+                  <FieldItem 
+                    key={index} 
+                    title={item.displayName} 
+                    editBtn={() => {handleClick(index)}} 
+                    deleteBtn={() => handleClickOpenDelete(fields[index])}
+                  />
+              ))}
+          </div>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Вы уверены что хотите удалить поле?</DialogTitle>
+          <Dialog open={openDeleteModal} onClose={handleCloseDelete}>
+            <DialogTitle>Вы уверены что хотите удалить поле?</DialogTitle>
 
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Нет
-          </Button>
-          <Button onClick={handleClose} color="secondary">
-            Да
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
+            <DialogActions className="btn-group">
+              <Button onClick={handleCloseDelete} color="primary">
+                No
+              </Button>
+              <Button onClick={onDeleteHandler} color="secondary" autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+    );
 }
 
 const mapStateToProps = state => ({
-  list: state.contactList,
-  fields: state.fieldList,
+    fields: state.fieldList,
 });
 
-// const mapDispatchToProps = (dispatch) => ({
-//   onDelete: (title) => dispatch(contactActions.contactDelete(title))
-// });
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onDelete: (value) => dispatch(actions.fieldDelete(value))
+    }
+}
 
-export default connect(mapStateToProps)(FieldList);
+export default connect(mapStateToProps, mapDispatchToProps)(FieldList)

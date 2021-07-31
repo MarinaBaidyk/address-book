@@ -1,1 +1,3 @@
-//export const FIELD_CHANGE = "FIELD_CHANGE";
+export const FIELD_CREATE = 'FIELD_CREATE';
+export const FIELD_DELETE = 'FIELD_DELETE';
+export const FIELD_UPDATE = 'FIELD_UPDATE';

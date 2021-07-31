@@ -3,33 +3,25 @@ import { connect } from 'react-redux';
 import {TextField, Button, InputAdornment } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useHistory, useParams } from "react-router-dom";
-//import { useState } from "react";
-//import './index.css';
+//import * as actions from "../../store/contactList/actions";
+import { useState } from "react";
 
-function ContactEdit ({fields, onChangeField, onUpdateContact, formData, list}) {
+function ContactEdit ({fields, onChangeContact, onUpdateContact, formData, list}) {
   const history = useHistory();
   const params = useParams();
+
+  const [contactData, setContactData] = useState(list[params.contactIndex]);
+
   const handleClick = () => {history.push("/contacts");}
 
-
-  const saveHandler = () => {
-    const contactData = fields.reduce((acc, field) => {
-      acc[field.name] = formData[field.name];
-      return acc;
-    }, {});
-
-    onUpdateContact(contactData);
-    //console.log(contactData);
-  };
-
-  // const keys = fields
-  //   .filter(field => field.display)
-  //   .map(field => field.name);
-
-  // const titles = list
-  //   .map(contact => keys.map(key => contact[key]).join(' '));
-
-  // console.log(list);
+  const checkInputValue = () => {
+    for (let key in contactData) {
+      if (!contactData[key]) {
+        return false;
+      }
+      return true;
+    }
+  }
 
   return (
     <>
@@ -40,8 +32,13 @@ function ContactEdit ({fields, onChangeField, onUpdateContact, formData, list}) 
             <span>{field.displayName}:</span>
             <TextField
               key={index}
-              value={list[params.contactIndex][field.name]}
-              onChange={e => onChangeField(field.name, e.target.value)}
+              value={contactData[field.name]}
+              onChange={e => {
+                setContactData( {
+                  ...contactData,
+                  [field.name]: e.target.value,
+                })
+              }}
               id="input-with-icon-textfield"
               InputProps={{
                 startAdornment: (
@@ -58,9 +55,10 @@ function ContactEdit ({fields, onChangeField, onUpdateContact, formData, list}) 
           color="primary" 
           className="btn btn-primary" 
           onClick={() => {
-            saveHandler();
+            onUpdateContact(contactData, params.contactIndex);
             handleClick();
           }}
+          disabled={!checkInputValue()}
           >
           Save
         </Button> 
@@ -76,14 +74,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-   onChangeField: (name, value) => dispatch({
-     type: 'FIELD_CHANGE',
-     payload: {name, value}
+   onChangeContact: (name, value, index) => dispatch({
+     type: 'CONTACT_CHANGE',
+     payload: {name, value, index}
    }),
-   onUpdateContact: contactData => dispatch({
-     type: 'CONTACT_UPDATE',
-     payload: contactData,
-   }),
+   //onConatctUpdate: (contactData ) => dispatch(actions.contactUpdate(contactData))
+   onUpdateContact: (contactData, id) => dispatch({
+    type: 'CONTACT_UPDATE',
+    payload: {contactData, id},
+  }),
 });
 
 

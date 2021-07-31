@@ -1,3 +1,5 @@
+import * as actionTypes from "../fieldList/actionTypes"
+
 const initialState = [
   {
     name: 'firstName',
@@ -28,17 +30,26 @@ const initialState = [
 
 export default function fieldListReducer(state = initialState, action) {
   switch (action.type) {
-    case 'FIELD_CREATE':
+    case actionTypes.FIELD_CREATE:
       return [
         ...state,
-        {},
+        {...action.payload},
       ];
 
-    case 'FIELD_UPDATE':
-      return state;
+    case actionTypes.FIELD_UPDATE:
+      return [
+        ...state.map((item, index) => {
+          if(index === parseInt(action.payload.id)){
+            return action.payload.value
+          }
+          return item;
+        })    
+      ];
 
-    case 'FIELD_DELETE':
-      return state;
+    case actionTypes.FIELD_DELETE:
+      return [
+        ...state.filter(item => item !== action.payload)
+    ];
 
     default:
       return state;

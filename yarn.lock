@@ -9690,6 +9690,11 @@
     "indent-string" "^4.0.0"
     "strip-indent" "^3.0.0"
 
+"redux-localstorage@^0.4.1":
+  "integrity" "sha1-+vbXGcWBOXKU2BFHP/zt7gZckzw="
+  "resolved" "https://registry.npmjs.org/redux-localstorage/-/redux-localstorage-0.4.1.tgz"
+  "version" "0.4.1"
+
 "redux-logger@^3.0.6":
   "integrity" "sha1-91VZZvMJjzyIYExEnPC69XeCdL8="
   "resolved" "https://registry.npmjs.org/redux-logger/-/redux-logger-3.0.6.tgz"

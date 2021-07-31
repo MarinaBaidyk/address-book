@@ -1,6 +1,16 @@
-// import * as actionTypes from "./actionTypes";
+import * as actionTypes from "./actionTypes";
 
-// export const changeField = (name, value) => ({
-//   type: FIELD_CHANGE,
-//   payload: {name, value}
-// });
+export const fieldCreate = value => ({
+  type: actionTypes.FIELD_CREATE,
+  payload: value,
+});
+
+export const fieldDelete = value => ({
+  type: actionTypes.FIELD_DELETE,
+  payload: value,
+});
+
+export const fieldUpdate = (value, id) => ({
+  type: actionTypes.FIELD_UPDATE,
+  payload: {value, id},
+});

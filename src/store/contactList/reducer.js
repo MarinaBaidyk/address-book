@@ -25,13 +25,25 @@ export default function contactListReducer(state = initialState, action) {
     case 'CONTACT_CREATE':
       return [...state, action.payload];
 
+
     case 'CONTACT_UPDATE':
       return [
         ...state.map((item, index) => {
-            if(index === parseInt(action.payload.contactIndex)) {
-                return action.payload.value;
+          if (index === parseInt(action.payload.id)) {
+            return action.payload.contactData
+          }
+          return item;
+        })];
+
+    case 'CONTACT_CHANGE':
+      return [
+        ...state.map((item, index) => {
+            if (index === parseInt(action.payload.index)) {
+                return {
+                  ...item,
+                  [action.payload.name]: action.payload.value,
+                }
             }
-            console.log(action.payload);
             return item;
         }) 
       ];
@@ -40,7 +52,6 @@ export default function contactListReducer(state = initialState, action) {
       return [
         ...state.filter(item => item !== action.payload)
       ];
-     //return [...state, action.payload];
 
     default:
       return state;

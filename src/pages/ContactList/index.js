@@ -81,7 +81,7 @@ function ContactList({ list, fields, removeContact }) {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={!!showContact} onClose={closeShowDialog}>
+      {showContact && <Dialog open={true} onClose={closeShowDialog}>
         <DialogTitle>Данные контакта:</DialogTitle>
         <DialogContent>
           {showContact && fields.filter(field => showContact[field.name]).map(field => (
@@ -95,7 +95,7 @@ function ContactList({ list, fields, removeContact }) {
             Close
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> }
     </>
   );
 }
